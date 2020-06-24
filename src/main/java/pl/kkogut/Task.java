@@ -55,8 +55,6 @@ public class Task {
     void sendResponse(){
         APIcaller.post(this.toJson());
     }
-
-
     File getWebPage(String websiteAdress){
         try {
             URL url = new URL(websiteAdress);
@@ -76,7 +74,6 @@ public class Task {
 
         return null;
     }
-
     JSONObject toJson(){
         String jsonStr = new Gson().toJson(this, Task.class);
         JSONObject json = new JSONObject(jsonStr);
