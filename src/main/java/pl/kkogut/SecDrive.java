@@ -24,7 +24,10 @@ public class SecDrive {
 
             }
             else if(param.equals("server_responses")){
-                Server.getAllResponses();
+                while(true){
+
+                    Server.getAllResponses();
+                }
             }
         }
         else {

