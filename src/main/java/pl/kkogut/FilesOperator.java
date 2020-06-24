@@ -1,18 +1,16 @@
 package pl.kkogut;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.io.BufferedWriter;
 import java.security.CodeSource;
 
 public class FilesOperator {
-    static File archive = createPath("D:/temp/secDrive", true);
+    static File archive = createPath("C:/temp/secDrive", true);
     static File[] drivesList = File.listRoots();
 
     public static File createPath(String pathname, boolean hidden) {

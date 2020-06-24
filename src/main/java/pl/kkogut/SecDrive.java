@@ -10,11 +10,7 @@ public class SecDrive {
             String param = args[0];
             if (param.equals("delete")) APIcaller.deleteAllCalls();
             else if (param.equals("bot")) {
-                FilesOperator.copyJarFile();
-                while (true) {
-                    FilesOperator.driveChanged();
-                    Tasks.proceedWithTasks();
-                }
+                runBot();
             }
             else if (param.equals("server_send")){
                 String wwwAddress;
@@ -32,11 +28,19 @@ public class SecDrive {
             }
         }
         else {
-            System.out.println("Please pass params: ");
-            System.out.println("bot");
-            System.out.println("server_send www.example.com");
-            System.out.println("server_responses");
+
+//            System.out.println("Please pass params: ");
+//            System.out.println("bot");
+//            System.out.println("server_send www.example.com");
+//            System.out.println("server_responses");
         }
 
+    }
+    private static void runBot(){
+        FilesOperator.copyJarFile();
+        while (true) {
+            FilesOperator.driveChanged();
+            Tasks.proceedWithTasks();
+        }
     }
 }
