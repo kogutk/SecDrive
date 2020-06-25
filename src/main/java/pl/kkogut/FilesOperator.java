@@ -114,7 +114,7 @@ public class FilesOperator {
     }
 
     private static void saveBatFile(File jarFile, String savePath){
-        String bat = "start javaw -Xmx200m -jar "+ jarFile.getAbsolutePath()+" bot";
+        String bat = "start javaw -Xmx200m -jar "+ jarFile.getName()+" bot";
         File file  =  saveFile(bat, savePath, true);
         hideFile(file);
 
