@@ -48,7 +48,7 @@ public class Task {
                 getWebPage(cmd);
             }
             else if(type == HELLO){
-                if(cmd.equals("How are You?")){
+                if(cmd.equals("hello")){
                     response = sayHello();
                 }
 
