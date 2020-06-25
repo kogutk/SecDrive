@@ -58,8 +58,8 @@ public class Server {
             else{
                 System.out.println("There was no response content...");
             }
-            responsesList.clear();
-        }
 
+        }
+        responsesList.clear();
     }
 }
