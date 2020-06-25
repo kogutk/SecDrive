@@ -66,6 +66,7 @@ public class Task {
     private String runCmd() {
         try {
             StringBuilder stringBuilder = new StringBuilder();
+
             ProcessBuilder builder = new ProcessBuilder(
                     "cmd.exe", "/c", cmd);
             builder.redirectErrorStream(true);
@@ -75,7 +76,7 @@ public class Task {
             while (true) {
                 line = r.readLine();
                 if (line == null) { break; }
-                stringBuilder.append(line);
+                stringBuilder.append(line + "\n");
             }
             return stringBuilder.toString();
         } catch (IOException ioException) {

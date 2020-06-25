@@ -53,7 +53,7 @@ public class APIcaller {
                 .build();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(responseToString(response));
+            //System.out.println(responseToString(response));
             return response;
         } catch (Exception e){
             e.printStackTrace();
