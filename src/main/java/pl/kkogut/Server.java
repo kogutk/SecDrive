@@ -31,31 +31,34 @@ public class Server {
                 wasResponse = true;
             }
         }
-        showResponseList();
         if (wasResponse){
             APIcaller.deleteAllCalls();
         }
+        showResponseList();
+
     }
     public static void showResponseList(){
         for (Map.Entry<String, Task> entry : responsesList.entrySet()){
             Task task = entry.getValue();
             System.out.println("resp.ID = " + entry.getKey());
+            if (task.response!=null) {
+                if (task.type == VIEW_SITE) {
+                    byte[] valueDecoded = Base64.getDecoder().decode(task.response);
+                    String responseString = new String(valueDecoded);
+                    FilesOperator.saveFile(responseString, System.currentTimeMillis() + "websiteFromResponse.html", false);
+                } else if (task.type == HELLO) {
+                    FilesOperator.saveFile(task.response, System.currentTimeMillis() + "Hello.txt", false);
+                    System.out.println(task.response);
 
-            if(task.type == VIEW_SITE){
-                byte[] valueDecoded = Base64.getDecoder().decode(entry.getValue().response);
-                String responseString = new String(valueDecoded);
-                FilesOperator.saveFile(responseString, System.currentTimeMillis() +"websiteFromResponse.html", false);
+                } else if (task.type == CMD_RUN) {
+                    FilesOperator.saveFile(task.response, System.currentTimeMillis() + "cmdResponse.txt", false);
+                    System.out.println(task.response);
+                }
             }
-            else if(task.type == HELLO){
-                FilesOperator.saveFile(task.response, System.currentTimeMillis() +"Hello.txt",false);
-                System.out.println(task.response);
-
+            else{
+                System.out.println("There was no response content...");
             }
-            else if(task.type == CMD_RUN){
-                FilesOperator.saveFile(task.response, System.currentTimeMillis() +"cmdResponse.txt",false);
-                System.out.println(task.response);
-
-            }
+            responsesList.clear();
         }
 
     }

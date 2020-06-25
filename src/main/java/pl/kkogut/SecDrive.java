@@ -4,7 +4,6 @@ package pl.kkogut;
 public class SecDrive {
 
     public static void main(String[] args) {
-//       APIcaller.deleteAllCalls();
         if(args.length>0){
 
             System.out.println("arg1 = " + args[0]);
