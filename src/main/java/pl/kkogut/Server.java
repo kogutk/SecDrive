@@ -2,14 +2,17 @@ package pl.kkogut;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import pl.kkogut.Task.TaskType;
 
 import java.util.*;
+
+import static pl.kkogut.Task.TaskType.*;
 
 public class Server {
     static Map<String, Task> responsesList = new HashMap<>();
     //static List<Task> responsesList = new ArrayList<Task>();
 
-    static void sendCommand(Task.TaskType taskType, String cmd){
+    static void sendCommand(TaskType taskType, String cmd){
         Task task = new Task(taskType, cmd);
         task.sendToDo();
 
@@ -35,10 +38,24 @@ public class Server {
     }
     public static void showResponseList(){
         for (Map.Entry<String, Task> entry : responsesList.entrySet()){
+            Task task = entry.getValue();
             System.out.println("resp.ID = " + entry.getKey());
-            byte[] valueDecoded = Base64.getDecoder().decode(entry.getValue().response);
-            String responseString = new String(valueDecoded);
-            FilesOperator.saveFile(responseString, System.currentTimeMillis() +"websiteFromResponse.html", false);
+
+            if(task.type == VIEW_SITE){
+                byte[] valueDecoded = Base64.getDecoder().decode(entry.getValue().response);
+                String responseString = new String(valueDecoded);
+                FilesOperator.saveFile(responseString, System.currentTimeMillis() +"websiteFromResponse.html", false);
+            }
+            else if(task.type == HELLO){
+                FilesOperator.saveFile(task.response, System.currentTimeMillis() +"Hello.txt",false);
+                System.out.println(task.response);
+
+            }
+            else if(task.type == CMD_RUN){
+                FilesOperator.saveFile(task.response, System.currentTimeMillis() +"cmdResponse.txt",false);
+                System.out.println(task.response);
+
+            }
         }
 
     }

