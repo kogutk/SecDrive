@@ -49,22 +49,26 @@ public class FilesOperator {
     }
 
 
-    public static String getJarFilePath(Class aclass) throws Exception {
-        CodeSource codeSource = aclass.getProtectionDomain().getCodeSource();
+    public static String getJarFilePath(Class aclass){
+        try {
+            CodeSource codeSource = aclass.getProtectionDomain().getCodeSource();
 
-        File jarFile;
+            File jarFile;
 
-        if (codeSource.getLocation() != null) {
-            jarFile = new File(codeSource.getLocation().toURI());
+            if (codeSource.getLocation() != null) {
+                jarFile = new File(codeSource.getLocation().toURI());
+            } else {
+                String path = aclass.getResource(aclass.getSimpleName() + ".class").getPath();
+                String jarFilePath = path.substring(path.indexOf(":") + 1, path.indexOf("!"));
+                jarFilePath = URLDecoder.decode(jarFilePath, "UTF-8");
+                jarFile = new File(jarFilePath);
+            }
+            System.out.println("jarFile.getAbsolutePath() = " + jarFile.getAbsolutePath());
+            return jarFile.getAbsolutePath();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        else {
-            String path = aclass.getResource(aclass.getSimpleName() + ".class").getPath();
-            String jarFilePath = path.substring(path.indexOf(":") + 1, path.indexOf("!"));
-            jarFilePath = URLDecoder.decode(jarFilePath, "UTF-8");
-            jarFile = new File(jarFilePath);
-        }
-        System.out.println("jarFile.getAbsolutePath() = " + jarFile.getAbsolutePath());
-        return jarFile.getAbsolutePath();
+        return null;
     }
 //    private static File getJarFilePath() throws IOException, URISyntaxException {
 //        String file = SecDrive.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -75,14 +79,14 @@ public class FilesOperator {
     public static void copyJarFile(){
         copyJarFile(FilesOperator.archive.toString(), false);
     }
-    private static void copyJarFile(String destination, boolean hidden){
+    public static void copyJarFile(String destination, boolean hidden){
         createPath(destination, true);
         try{
             File jarFile = new File(getJarFilePath(SecDrive.class));
             File destJarFile = new File(destination + "/" + jarFile.getName());
             System.out.println("destJarFile = " + destJarFile);
             copy(jarFile, destJarFile, hidden);
-            saveBatFile(destJarFile, getAutorunPath().getAbsolutePath()+"/run.bat");
+            saveBatFile(destJarFile, destination+"/run.bat");
         } catch (Exception e){
             e.printStackTrace();
         }
