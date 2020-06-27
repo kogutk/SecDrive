@@ -17,6 +17,8 @@ Commands and responses:
 
 * cmdRun - bot run a cmd command on its Windows system
     * command - command to run
+    
+Program uses https://rbaskets.in/ basket to send commands and responses.
 
 ## How to run it
 Simple run Jar file with argument "bot".
