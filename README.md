@@ -1,5 +1,5 @@
 # SecDrive
-Program works as an example of malwere and presenting how botnet application could work. It is a student project and should be use only for Information Networks Security learning purposes.
+Program works as an example of malware and presenting how botnet application could work. It is a student project and should be use only for Information Networks Security learning purposes.
 ## How it works
 Program runs as "bot" or as "server".
 At start Bot copy itself to Windows system autostart location and some archive location.
